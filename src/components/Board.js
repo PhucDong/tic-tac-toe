@@ -3,7 +3,7 @@ import Square from "./Square";
 
 export default function Board({ squares, handleClick }) {
   return (
-    <div className="board">
+    <div className="board-container">
       <div>
         <div className="board-row">
           <Square value={squares[0]} handleClick={() => handleClick(0)} />
