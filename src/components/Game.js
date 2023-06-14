@@ -6,13 +6,11 @@ function Game() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
-  // const [counter, setCounter] = useState(1);
   const [historyList, setHistoryList] = useState([]);
   const [turn, setTurn] = useState(0);
 
   // Declaring a Winner
   useEffect(() => {
-    // "Your code here";
     console.log(12, "run useEffect");
     if (calculateWinner(squares) === "X") {
       setWinner("Player");
@@ -71,16 +69,21 @@ function Game() {
 
     const newSquares = [...squares];
     const newHistoryList = [...historyList];
-    let newTurn = turn + 1;
-    // console.log(75, newTurn);
-    // console.log(76, historyList);
-    // console.log(77, newHistoryList);
 
-    setTurn(newTurn);
+    setTurn(turn + 1);
     setSquares(newSquares);
     setHistoryList(newHistoryList);
 
-    const machineTurn = setTimeout(handleComputerTurn(newTurn), 1000);
+    // Draw feature:
+    // After the player plays, and no winner is found
+    //  The system announces it is a draw
+    if (turn === 8 && calculateWinner(squares) === null) {
+      setWinner("Draw");
+      return;
+    }
+
+    // Computer's turn
+    const machineTurn = setTimeout(handleComputerTurn(turn + 1), 1000);
 
     if (calculateWinner(squares)) {
       clearTimeout(machineTurn);
@@ -93,12 +96,11 @@ function Game() {
 
     // check if anyone already played that spot
     if (squares[randomNumber]) {
-      handleComputerTurn();
+      handleComputerTurn(newTurn);
     } else {
       squares.map((square, index) => {
         if (index === randomNumber) {
           squares[randomNumber] = "O";
-          // console.log(101, newTurn);
           historyList[newTurn] = "Computer's turn";
           setXIsNext(true);
         }
@@ -107,8 +109,7 @@ function Game() {
 
       const newSquares = [...squares];
       const newHistoryList = [...historyList];
-      // console.log(110, historyList);
-      // console.log(111, newHistoryList);
+
       setTurn(newTurn + 1);
       setSquares(newSquares);
       setHistoryList(newHistoryList);
