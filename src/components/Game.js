@@ -93,6 +93,7 @@ function Game() {
   // Handle machine's turn
   // const handleComputerTurn = () => {
   const handleComputerTurn = () => {
+    let newTurn = 0;
     // User wins, computer is not allowed to played
     if (calculateWinner(squares)) {
       return;
@@ -107,7 +108,8 @@ function Game() {
       squares.map((square, index) => {
         if (index === randomNumber) {
           squares[randomNumber] = "O";
-          historyList[turn + 1] = "Computer's turn";
+          newTurn = turn + 1;
+          historyList[newTurn] = "Computer's turn";
           // historyList.push("Computer's turn");
           setXIsNext(true);
         }
@@ -117,7 +119,7 @@ function Game() {
       const newSquares = [...squares];
       const newHistoryList = [...historyList];
 
-      setTurn(turn + 1);
+      setTurn(newTurn + 1);
       setSquares(newSquares);
       setHistoryList(newHistoryList);
     }
