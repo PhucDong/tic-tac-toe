@@ -11,7 +11,6 @@ function Game() {
 
   // Declaring a Winner
   useEffect(() => {
-    console.log(14, "run useEffect");
     if (calculateWinner(squares) === "X") {
       setWinner("Player");
     } else if (calculateWinner(squares) === "O") {
@@ -84,8 +83,7 @@ function Game() {
     }
 
     // Computer's turn
-    // const machineTurn = setTimeout(handleComputerTurn(), 1000);
-    const machineTurn = setTimeout(handleComputerTurn(turn + 1), 1000);
+    const machineTurn = setTimeout(handleComputerTurn, 1000);
 
     if (calculateWinner(squares)) {
       clearTimeout(machineTurn);
@@ -94,7 +92,7 @@ function Game() {
 
   // Handle machine's turn
   // const handleComputerTurn = () => {
-  const handleComputerTurn = (newTurn) => {
+  const handleComputerTurn = () => {
     // User wins, computer is not allowed to played
     if (calculateWinner(squares)) {
       return;
@@ -104,13 +102,12 @@ function Game() {
 
     // check if anyone already played that spot
     if (squares[randomNumber]) {
-      // handleComputerTurn();
-      handleComputerTurn(newTurn);
+      handleComputerTurn();
     } else {
       squares.map((square, index) => {
         if (index === randomNumber) {
           squares[randomNumber] = "O";
-          historyList[newTurn] = "Computer's turn";
+          historyList[turn + 1] = "Computer's turn";
           // historyList.push("Computer's turn");
           setXIsNext(true);
         }
@@ -120,7 +117,7 @@ function Game() {
       const newSquares = [...squares];
       const newHistoryList = [...historyList];
 
-      setTurn(newTurn + 1);
+      setTurn(turn + 1);
       setSquares(newSquares);
       setHistoryList(newHistoryList);
     }
