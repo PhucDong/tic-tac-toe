@@ -62,6 +62,7 @@ function Game() {
       if (index === i) {
         squares[i] = "X";
         historyList[turn] = "Player's turn";
+        // historyList.push("Player's turn");
         setXIsNext(false);
       }
       return null;
@@ -83,6 +84,7 @@ function Game() {
     }
 
     // Computer's turn
+    // const machineTurn = setTimeout(handleComputerTurn(), 1000);
     const machineTurn = setTimeout(handleComputerTurn(turn + 1), 1000);
 
     if (calculateWinner(squares)) {
@@ -91,6 +93,7 @@ function Game() {
   };
 
   // Handle machine's turn
+  // const handleComputerTurn = () => {
   const handleComputerTurn = (newTurn) => {
     // User wins, computer is not allowed to played
     if (calculateWinner(squares)) {
@@ -101,12 +104,14 @@ function Game() {
 
     // check if anyone already played that spot
     if (squares[randomNumber]) {
+      // handleComputerTurn();
       handleComputerTurn(newTurn);
     } else {
       squares.map((square, index) => {
         if (index === randomNumber) {
           squares[randomNumber] = "O";
           historyList[newTurn] = "Computer's turn";
+          // historyList.push("Computer's turn");
           setXIsNext(true);
         }
         return null;
@@ -123,6 +128,7 @@ function Game() {
 
   // Restart game
   const handleRestart = () => {
+    setTurn(0);
     setSquares(Array(9).fill(null));
     setHistoryList([]);
     setWinner(null);
