@@ -11,7 +11,7 @@ function Game() {
 
   // Declaring a Winner
   useEffect(() => {
-    console.log(12, "run useEffect");
+    console.log(14, "run useEffect");
     if (calculateWinner(squares) === "X") {
       setWinner("Player");
     } else if (calculateWinner(squares) === "O") {
@@ -92,6 +92,11 @@ function Game() {
 
   // Handle machine's turn
   const handleComputerTurn = (newTurn) => {
+    // User wins, computer is not allowed to played
+    if (calculateWinner(squares)) {
+      return;
+    }
+
     let randomNumber = Math.floor(Math.random() * 9);
 
     // check if anyone already played that spot
