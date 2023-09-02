@@ -7,7 +7,6 @@ function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
   const [historyList, setHistoryList] = useState([]);
-  const [turn, setTurn] = useState(0);
 
   // Declaring a Winner
   useEffect(() => {
@@ -16,7 +15,42 @@ function Game() {
     } else if (calculateWinner(squares) === "O") {
       setWinner("Computer");
     }
-  }, [squares]);
+
+    // Handle machine's turn
+    const handleComputerTurn = () => {
+      // User wins, computer is not allowed to played
+      if (calculateWinner(squares)) {
+        return;
+      }
+
+      let randomNumber = Math.floor(Math.random() * 9);
+
+      // check if anyone already played that spot
+      if (squares[randomNumber]) {
+        handleComputerTurn();
+      } else {
+        squares.map((square, index) => {
+          if (index === randomNumber) {
+            squares[randomNumber] = "O";
+            setXIsNext(true);
+          }
+          return null;
+        });
+
+        setSquares([...squares]);
+        setHistoryList([...historyList, "Computer's turn"]);
+      }
+    };
+
+    if (xIsNext === false) {
+      // Computer's turn
+      const machineTurn = setTimeout(handleComputerTurn, 1000);
+
+      if (calculateWinner(squares)) {
+        clearTimeout(machineTurn);
+      }
+    }
+  }, [squares, xIsNext, historyList]);
 
   // function to check if a player has won.
   // If a player has won, we can display text such as “Winner: X” or “Winner: O”.
@@ -60,74 +94,26 @@ function Game() {
     squares.map((square, index) => {
       if (index === i) {
         squares[i] = "X";
-        historyList[turn] = "Player's turn";
-        // historyList.push("Player's turn");
         setXIsNext(false);
       }
       return null;
     });
 
-    const newSquares = [...squares];
-    const newHistoryList = [...historyList];
-
-    setTurn(turn + 1);
-    setSquares(newSquares);
-    setHistoryList(newHistoryList);
+    setSquares([...squares]);
+    setHistoryList([...historyList, "Player's turn"]);
 
     // Draw feature:
     // After the player plays, and no winner is found
     //  The system announces it is a draw
-    if (turn === 8 && calculateWinner(squares) === null) {
+    if (historyList.length === 8 && calculateWinner(squares) === null) {
       setWinner("Draw");
       return;
-    }
-
-    // Computer's turn
-    const machineTurn = setTimeout(handleComputerTurn, 1000);
-
-    if (calculateWinner(squares)) {
-      clearTimeout(machineTurn);
-    }
-  };
-
-  // Handle machine's turn
-  // const handleComputerTurn = () => {
-  const handleComputerTurn = () => {
-    let newTurn = 0;
-    // User wins, computer is not allowed to played
-    if (calculateWinner(squares)) {
-      return;
-    }
-
-    let randomNumber = Math.floor(Math.random() * 9);
-
-    // check if anyone already played that spot
-    if (squares[randomNumber]) {
-      handleComputerTurn();
-    } else {
-      squares.map((square, index) => {
-        if (index === randomNumber) {
-          squares[randomNumber] = "O";
-          newTurn = turn + 1;
-          historyList[newTurn] = "Computer's turn";
-          // historyList.push("Computer's turn");
-          setXIsNext(true);
-        }
-        return null;
-      });
-
-      const newSquares = [...squares];
-      const newHistoryList = [...historyList];
-
-      setTurn(newTurn + 1);
-      setSquares(newSquares);
-      setHistoryList(newHistoryList);
     }
   };
 
   // Restart game
   const handleRestart = () => {
-    setTurn(0);
+    console.log("Call handleRestart");
     setSquares(Array(9).fill(null));
     setHistoryList([]);
     setWinner(null);
